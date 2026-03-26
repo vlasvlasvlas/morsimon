@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MORSIMON - Voyager Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- BACKGROUND ELEMENTS -->
+    <div class="cosmos-bg"></div>
+    <div class="golden-record-grid"></div>
+
+    <header>
+        <h1 id="home-title" class="clickable">MORSIMON</h1>
+        <p class="telemetry">VGR-1 // INTERSTELLAR TRANSLATOR RUNTIME</p>
+        <button class="voyager-btn small" id="fullscreenBtn" style="position: absolute; top: 30px; right: 30px; width: auto; padding: 10px 15px; font-size: 0.7rem;">[ ] FULLSCREEN</button>
+    </header>
+
+    <main id="app-container">
+        <!-- VISTA HOME -->
+        <section id="view-home" class="view active">
+            <div class="menu-container">
+                <button class="voyager-btn" onclick="app.navigate('classic')">
+                    <span class="btn-num">01.</span> SECUENCIA CLÁSICA
+                </button>
+                <button class="voyager-btn" onclick="app.navigate('experimental')">
+                    <span class="btn-num">02.</span> ORÁCULO EXPERIMENTAL
+                </button>
+                <p class="telemetry" style="margin-top: 30px;">SHORTCUTS DE TECLADO: [Q] Verde | [W] Rojo | [A] Amarillo | [S] Azul</p>
+            </div>
+        </section>
+
+        <!-- VISTA MODO CLÁSICO -->
+        <section id="view-classic" class="view">
+            <div class="classic-content menu-container">
+                <h2 style="font-family:'Playfair Display',serif; color:var(--gold); margin-bottom:10px;">SECUENCIA CLÁSICA</h2>
+                <p class="telemetry">[MÓDULO EN CONSTRUCCIÓN - FASE 4]</p>
+                <button class="voyager-btn small" onclick="app.navigate('home')" style="margin-top:20px; width:200px;">VOLVER</button>
+            </div>
+        </section>
+
+        <!-- VISTA MODO EXPERIMENTAL -->
+        <section id="view-experimental" class="view">
+            <div class="experimental-layout">
+                <!-- Columna Izquierda: El Instrumento -->
+                <div class="instrument-column" style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+                    <div class="simon-container" id="simon-container">
+                        <div class="simon-board" id="simonBoard">
+                            <div class="quadrant green" id="q-green" data-color="green"><span class="key-hint">Q</span></div>
+                            <div class="quadrant red" id="q-red" data-color="red"><span class="key-hint">W</span></div>
+                            <div class="quadrant yellow" id="q-yellow" data-color="yellow"><span class="key-hint">A</span></div>
+                            <div class="quadrant blue" id="q-blue" data-color="blue"><span class="key-hint">S</span></div>
+                            <div class="center-core">
+                                <div class="core-ring"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="telemetry">TECLADO: Q, W, A, S</p>
+                </div>
+
+                <!-- Columna Derecha: Lector y Letras -->
+                <div class="data-column">
+                    <div class="controls-voyager">
+                        <div class="control-group">
+                            <label>INPUT_DATA [.TXT]</label>
+                            <input type="file" id="fileInput" accept=".txt">
+                        </div>
+                        <div class="control-group">
+                            <label>TEMPO_BPM [<span id="bpmDisplay">120</span>]</label>
+                            <input type="range" id="bpmSlider" min="60" max="300" value="120">
+                        </div>
+                        <button class="voyager-btn small" id="playSequenceBtn" disabled>INICIAR TRANSMISIÓN</button>
+                    </div>
+
+                    <div class="lyrics-container" id="lyricsContainer">
+                        <p class="telemetry lyrics-placeholder">ESPERANDO ARCHIVO DE DATOS...</p>
+                        <!-- Los párrafos y letras (spans) se inyectarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
