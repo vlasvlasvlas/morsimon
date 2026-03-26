@@ -1,28 +1,44 @@
-# MORSIMON - Voyager Edition
+# MORSIMON
 
-MORSIMON es una pequeña pieza artística audiovisual que fusiona el lenguaje del código Morse con la mecánica del clásico juego "Simón". 
+**MORSIMON** es un proyecto interactivo que cruza el lenguaje del código Morse con la lógica del clásico juego **Simón**.
 
-El proyecto surgió como un experimento para explorar las capacidades de la Web Audio API, integrando un sintetizador de 5 épocas (o presets sonoros) inspirados en la estética de la sonda espacial Voyager de 1977.
+## Qué propone
 
-## Qué hace este proyecto
+MORSIMON funciona como juego de memoria y también como sistema de sonido y transmisión.
 
-### Modo Clásico
-- **Bot vs Human:** El juego tradicional para poner a prueba la memoria.
-- **Bot vs Bot:** El juego se ejecuta solo, permitiendo escuchar las frecuencias generadas.
-- **Dual Bot vs Bot:** Dos instancias de Simón operan de forma independiente, cada una con su propio motor de audio, creando capas sonoras y ritmos desincronizados.
+### Modo clásico
 
-### Modo Experimental
-- Permite escribir texto en tiempo real para traducirlo a código Morse.
+- **Bot vs Human**  
+  La versión tradicional del juego, pensada para poner a prueba la memoria y la atención.
+
+- **Bot vs Bot**  
+  El sistema se ejecuta de forma autónoma, permitiendo escuchar las secuencias y variaciones generadas por el motor sonoro.
+
+- **Dual Bot vs Bot**  
+  Dos instancias de Simón corren en paralelo, cada una con su propio motor de audio, produciendo capas sonoras, cruces rítmicos y desajustes temporales.
+
+### Modo experimental
+
+- Permite escribir texto en tiempo real y traducirlo a **código Morse**.
 - Permite cargar archivos `.txt` para generar transmisiones automáticas.
-- Los sonidos son generados íntegramente por código, sin usar samples externos.
+- Todo el audio es generado por código en tiempo real, sin samples externos.
 
-## Controles de Teclado
-- **Simón 1 (Izq):** `Q`, `W`, `A`, `S` 
-- **Simón 2 (Der):** `E`, `R`, `D`, `F`
-- **Modo Zen:** Presiona `X` para ocultar la interfaz y ver solo los instrumentos.
+## Controles de teclado
+
+- **Simón 1 (izquierda):** `Q`, `W`, `A`, `S`
+- **Simón 2 (derecha):** `E`, `R`, `D`, `F`
+- **Modo Zen:** presionar `X` para ocultar la interfaz y dejar visibles solo los instrumentos.
 
 ## Instalación
-Basta con clonar el repositorio y abrir el archivo `index.html` en cualquier navegador. No es necesario instalar librerías ni configurar servidores pesados.
 
----
-*Este proyecto es simplemente un ejercicio de programación y síntesis de audio para quienes disfrutan de los sonidos analógicos y la estética espacial.*
+Cloná el repositorio y abrí `index.html` en cualquier navegador moderno.
+
+No requiere dependencias externas ni configuraciones complejas: está pensado para correr directamente en el navegador.
+
+## Sobre el proyecto
+
+MORSIMON toma la estructura secuencial del juego Simón y la cruza con la traducción de texto a Morse, abriendo un uso más libre del sistema entre juego, secuencia y escucha.
+
+## Repositorio
+
+[GitHub: vlasvlasvlas/morsimon](https://github.com/vlasvlasvlas/morsimon)

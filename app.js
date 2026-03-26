@@ -1,4 +1,4 @@
-/* === MORSIMON VOYAGER ENGINE === */
+/* === MORSIMON ENGINE === */
 
 const APP_STATE = {
     bpm: 12,
