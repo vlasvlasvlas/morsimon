@@ -8,7 +8,8 @@ const APP_STATE = {
     synthConfigs: null,
     synth: {
         1: { synthEpoch: "4", rootFreq: 110.00, delayTime: 0.0, feedback: 0.0, masterVolume: 0.6 },
-        2: { synthEpoch: "4", rootFreq: 110.00, delayTime: 0.0, feedback: 0.0, masterVolume: 0.6 }
+        2: { synthEpoch: "4", rootFreq: 110.00, delayTime: 0.0, feedback: 0.0, masterVolume: 0.6 },
+        'loops': { synthEpoch: "4", rootFreq: 110.00, delayTime: 0.0, feedback: 0.0, masterVolume: 0.6 }
     }
 };
 
@@ -124,7 +125,6 @@ const app = {
             const expHolder = document.getElementById('experimental-simon-placeholder');
             expHolder.insertBefore(simonElement, expHolder.firstChild);
         } else if (target === 'loops') {
-            document.getElementById('homeBtn-header').style.display = 'block';
             stopClassicGame();
             if (typeof stopGenerativeGame === 'function') stopGenerativeGame();
             
@@ -292,7 +292,8 @@ const SYNTH_PRESETS = {
 let audioCtx, globalCompressor;
 const synthNodes = {
     1: { masterGain: null, delayNode: null, delayFeedback: null, activeEngines: {} },
-    2: { masterGain: null, delayNode: null, delayFeedback: null, activeEngines: {} }
+    2: { masterGain: null, delayNode: null, delayFeedback: null, activeEngines: {} },
+    'loops': { masterGain: null, delayNode: null, delayFeedback: null, activeEngines: {} }
 };
 
 const initAudio = (instanceId = 1) => {
@@ -306,8 +307,9 @@ const initAudio = (instanceId = 1) => {
         globalCompressor.release.setValueAtTime(0.25, audioCtx.currentTime);  
         globalCompressor.connect(audioCtx.destination);
     }
+    if (!synthNodes[instanceId]) synthNodes[instanceId] = { activeEngines: {} };
     const nodes = synthNodes[instanceId];
-    if (nodes.masterGain) return;
+    if (nodes && nodes.masterGain) return;
 
     nodes.masterGain = audioCtx.createGain();
     nodes.masterGain.gain.setValueAtTime(APP_STATE.synth[instanceId].masterVolume * 0.4, audioCtx.currentTime); 
@@ -411,7 +413,7 @@ const startTone = (color, instanceId = 1) => {
     osc.start();
     nodes.activeEngines[color] = { osc, env, filter, lfo };
     
-    const quadrantId = instanceId === 1 ? `q-${color}` : `q-${color}-2`;
+    const quadrantId = (instanceId === 1) ? `q-${color}` : (instanceId === 2 ? `q-${color}-2` : `q-${color}-${instanceId}`);
     const quadrant = document.getElementById(quadrantId);
     if(quadrant) quadrant.classList.add('active');
 };
@@ -442,7 +444,7 @@ const stopTone = (color, instanceId = 1) => {
     
     delete nodes.activeEngines[color];
     
-    const quadrantId = instanceId === 1 ? `q-${color}` : `q-${color}-2`;
+    const quadrantId = (instanceId === 1) ? `q-${color}` : (instanceId === 2 ? `q-${color}-2` : `q-${color}-${instanceId}`);
     const quadrant = document.getElementById(quadrantId);
     if(quadrant) quadrant.classList.remove('active');
 };

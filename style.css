@@ -25,6 +25,8 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* Cosmos Aesthetic Elements */
@@ -470,6 +472,13 @@ input[type=range]::-moz-range-track {
 /* LOOP STATION UI */
 .loops-layout {
     display:flex; width: 100%; gap: 60px; justify-content: center; align-items: center;
+}
+.loops-layout .instrument-column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 420px;
+    min-height: 420px;
 }
 .loop-orbit-bg {
     stroke: rgba(212, 175, 55, 0.05); /* very dim gold */
