@@ -5,6 +5,7 @@ const APP_STATE = {
     isPlayingFILE: false,
     textData: "",
     isClassicPlaying: false,
+    synthConfigs: null,
     synth: {
         1: { synthEpoch: "4", rootFreq: 110.00, delayTime: 0.0, feedback: 0.0, masterVolume: 0.6 },
         2: { synthEpoch: "4", rootFreq: 110.00, delayTime: 0.0, feedback: 0.0, masterVolume: 0.6 }
@@ -323,15 +324,23 @@ const initAudio = (instanceId = 1) => {
 const getToneConfig = (color, instanceId) => {
     const fBase = APP_STATE.synth[instanceId].rootFreq;
     const epoch = APP_STATE.synth[instanceId].synthEpoch;
+    const config = APP_STATE.synthConfigs ? APP_STATE.synthConfigs[epoch] : null;
+
     const freqs = { green: fBase, red: fBase * 2.0, blue: fBase * 1.4983, yellow: fBase * 4.0 };
     const f = freqs[color];
+    
     let type = 'sine', freq = f;
     
-    if (epoch === '1') { type = 'square'; freq = f * 2; } 
-    else if (epoch === '2') { type = 'sawtooth'; freq = f; }
-    else if (epoch === '3') { type = 'triangle'; freq = f / 2;} 
-    else if (epoch === '4') { type = 'sine'; freq = f; } 
-    else if (epoch === '5') { type = 'sine'; freq = f * 1.5; }
+    if (config) {
+        type = config.type || 'sine';
+        freq = f * (config.freq_multiplier || 1.0);
+    } else {
+        if (epoch === '1') { type = 'square'; freq = f * 2; } 
+        else if (epoch === '2') { type = 'sawtooth'; freq = f; }
+        else if (epoch === '3') { type = 'triangle'; freq = f / 2;} 
+        else if (epoch === '4') { type = 'sine'; freq = f; } 
+        else if (epoch === '5') { type = 'sine'; freq = f * 1.5; }
+    }
     return { type, freq }; 
 };
 
@@ -342,23 +351,59 @@ const startTone = (color, instanceId = 1) => {
     if (nodes.activeEngines[color]) return;
 
     const epoch = APP_STATE.synth[instanceId].synthEpoch;
+    const config = APP_STATE.synthConfigs ? APP_STATE.synthConfigs[epoch] : null;
     const conf = getToneConfig(color, instanceId);
+    
     const osc = audioCtx.createOscillator();
+    const filter = audioCtx.createBiquadFilter();
     const env = audioCtx.createGain();
     
     osc.type = conf.type;
     osc.frequency.setValueAtTime(conf.freq, audioCtx.currentTime);
     
+    // Filter config
+    const filterType = config ? (config.filter_type || 'lowpass') : 'lowpass';
+    const filterCutoff = config ? (config.filter_cutoff || 4000) : 4000;
+    const filterResonance = config ? (config.filter_resonance || 1.0) : 1.0;
+    const filterEnvAmt = config ? (config.filter_env_amount || 0) : 0;
+    const fAtt = config ? (config.filter_attack || 0.02) : 0.02;
+    
+    filter.type = filterType;
+    filter.Q.value = filterResonance;
+    filter.frequency.setValueAtTime(filterCutoff, audioCtx.currentTime);
+    
+    if (filterEnvAmt > 0) {
+        filter.frequency.setTargetAtTime(filterCutoff + filterEnvAmt, audioCtx.currentTime, fAtt);
+    }
+    
+    // LFO config (Pitch modulation)
+    let lfo = null;
+    let lfoGain = null;
+    const lfoRate = config ? (config.lfo_rate || 0) : 0;
+    const lfoDepth = config ? (config.lfo_depth || 0) : 0;
+    
+    if (lfoRate > 0 && lfoDepth > 0) {
+        lfo = audioCtx.createOscillator();
+        lfo.type = 'sine';
+        lfo.frequency.value = lfoRate;
+        lfoGain = audioCtx.createGain();
+        lfoGain.gain.value = lfoDepth;
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc.frequency);
+        lfo.start();
+    }
+    
     env.gain.setValueAtTime(0, audioCtx.currentTime);
-    const attackConstant = epoch === '1' ? 0.005 : 0.02; 
+    const attackConstant = config ? (config.attack || 0.02) : (epoch === '1' ? 0.005 : 0.02);
     env.gain.setTargetAtTime(0.7, audioCtx.currentTime, attackConstant);
     
-    osc.connect(env);
+    osc.connect(filter);
+    filter.connect(env);
     env.connect(nodes.masterGain);
     env.connect(nodes.delayNode);
     
     osc.start();
-    nodes.activeEngines[color] = { osc, env };
+    nodes.activeEngines[color] = { osc, env, filter, lfo };
     
     const quadrantId = instanceId === 1 ? `q-${color}` : `q-${color}-2`;
     const quadrant = document.getElementById(quadrantId);
@@ -368,15 +413,27 @@ const startTone = (color, instanceId = 1) => {
 const stopTone = (color, instanceId = 1) => {
     const nodes = synthNodes[instanceId];
     if (!nodes || !nodes.activeEngines[color]) return;
-    const { osc, env } = nodes.activeEngines[color];
+    const { osc, env, filter, lfo } = nodes.activeEngines[color];
     const epoch = APP_STATE.synth[instanceId].synthEpoch;
+    const config = APP_STATE.synthConfigs ? APP_STATE.synthConfigs[epoch] : null;
     const now = audioCtx.currentTime;
     
     env.gain.cancelScheduledValues(now);
-    const releaseConstant = epoch === '1' ? 0.01 : 0.05; 
+    const releaseConstant = config ? (config.release || 0.05) : (epoch === '1' ? 0.01 : 0.05);
     env.gain.setTargetAtTime(0.00001, now, releaseConstant);
     
-    osc.stop(now + 1.0); 
+    const filterCutoff = config ? (config.filter_cutoff || 4000) : 4000;
+    const filterEnvAmt = config ? (config.filter_env_amount || 0) : 0;
+    const fRel = config ? (config.filter_release || releaseConstant) : releaseConstant;
+    
+    if (filter && filterEnvAmt > 0) {
+        filter.frequency.cancelScheduledValues(now);
+        filter.frequency.setTargetAtTime(filterCutoff, now, fRel);
+    }
+    
+    osc.stop(now + 2.0); 
+    if (lfo) lfo.stop(now + 2.0);
+    
     delete nodes.activeEngines[color];
     
     const quadrantId = instanceId === 1 ? `q-${color}` : `q-${color}-2`;
@@ -848,6 +905,28 @@ async function gameOverClassic() {
 
 
 // Final Initialization
+async function loadSynthConfigs() {
+    try {
+        APP_STATE.synthConfigs = window.SYNTH_CONFIGS;
+        
+        const selects = [document.getElementById('synthEpochSelect'), document.getElementById('synthEpochSelect2')];
+        selects.forEach(select => {
+            if (!select) return;
+            select.innerHTML = '';
+            for (const [id, config] of Object.entries(APP_STATE.synthConfigs)) {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = config.name;
+                if (id === "4") option.selected = true;
+                select.appendChild(option);
+            }
+        });
+    } catch (e) {
+        console.error("Failed to load synths.yaml", e);
+    }
+}
+
+loadSynthConfigs();
 setupEngineControls(1);
 setupEngineControls(2);
 

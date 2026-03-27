@@ -1,0 +1,11 @@
+{
+  "name": "morsimon",
+  "version": "2.0.0",
+  "description": "Interactive Morse Code and Simon game synthesizer",
+  "scripts": {
+    "start": "serve -l 8000"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

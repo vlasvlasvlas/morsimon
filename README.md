@@ -31,10 +31,15 @@ MORSIMON funciona como juego de memoria y también como sistema de sonido y tran
 
 ## Instalación
 
-Cloná el repositorio y abrí `index.html` en cualquier navegador moderno.
+Dado que el proyecto carga la configuración de sintes desde el archivo `synths.js`, puedes elegir abrir el `index.html` directamente (funcionará sin problemas) o bien levantar un servidor de desarrollo si prefieres esa experiencia (útil para live reload o testeo en red).
 
-No requiere dependencias externas ni configuraciones complejas: está pensado para correr directamente en el navegador.
+Para correr el servidor local en el puerto 8000:
+```bash
+npm install
+npm start
+```
 
+Luego abre `http://localhost:8000` en tu navegador.
 ## Sobre el proyecto
 
 MORSIMON toma la estructura secuencial del juego Simón y la cruza con la traducción de texto a Morse, abriendo un uso más libre del sistema entre juego, secuencia y escucha.
