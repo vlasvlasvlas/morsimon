@@ -474,11 +474,19 @@ input[type=range]::-moz-range-track {
     display:flex; width: 100%; gap: 60px; justify-content: center; align-items: center;
 }
 .loops-layout .instrument-column {
+    position: relative;
+    width: 420px;
+    height: 420px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 420px;
-    min-height: 420px;
+}
+.loops-layout .simon-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.0);
+    margin: 0;
 }
 .loop-orbit-bg {
     stroke: rgba(212, 175, 55, 0.05); /* very dim gold */

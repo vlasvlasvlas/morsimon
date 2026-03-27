@@ -72,15 +72,17 @@ document.addEventListener('keydown', (e) => {
     }
 
     if (KEY_MAP[e.key] && !e.repeat) {
-        const { color, id } = KEY_MAP[e.key];
-        userStartTone(color, id);
+        const { color } = KEY_MAP[e.key];
+        const instanceId = (app.currentView === 'home') ? 1 : app.currentView;
+        userStartTone(color, instanceId);
     }
 });
 document.addEventListener('keyup', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (KEY_MAP[e.key]) {
-        const { color, id } = KEY_MAP[e.key];
-        userStopTone(color, id);
+        const { color } = KEY_MAP[e.key];
+        const instanceId = (app.currentView === 'home') ? 1 : app.currentView;
+        userStopTone(color, instanceId);
     }
 });
 
