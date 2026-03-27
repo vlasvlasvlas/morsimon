@@ -249,8 +249,61 @@
             </div>
         <!-- VISTA MODO LOOPS -->
         <section id="view-loops" class="view">
-            <div style="display:flex; justify-content:center; align-items:center; height:100%; color:var(--gold); padding: 50px;">
-                
+            <div class="loops-layout">
+                <!-- Columna Izquierda: El Instrumento (Looper) -->
+                <div class="instrument-column" style="position:relative;">
+                    <!-- Anillo de progreso SVG (Orbit) -->
+                    <svg id="loop-orbit-svg" width="420" height="420" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); pointer-events:none; z-index:0;">
+                        <circle cx="210" cy="210" r="195" fill="none" class="loop-orbit-bg" />
+                        <circle cx="210" cy="210" r="195" fill="none" class="loop-orbit-progress" id="loop-progress-circle" />
+                    </svg>
+                    
+                    <div class="simon-container">
+                        <div class="simon-flipper">
+                            <div class="simon-face simon-front">
+                                <div class="simon-board" id="loops-simon-board">
+                                    <div class="quadrant green" data-color="green" data-instance="loops"><span class="key-hint">Q</span></div>
+                                    <div class="quadrant red" data-color="red" data-instance="loops"><span class="key-hint">W</span></div>
+                                    <div class="quadrant yellow" data-color="yellow" data-instance="loops"><span class="key-hint">A</span></div>
+                                    <div class="quadrant blue" data-color="blue" data-instance="loops"><span class="key-hint">S</span></div>
+                                    <div class="center-core" id="loops-core">
+                                        <div class="core-ring"></div>
+                                        <span id="loops-status-indicator" style="color:var(--gold-dim); font-size:0.75rem; letter-spacing:0.1em; font-weight:bold;">IDLE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Controles de Loops -->
+                <div class="data-column">
+                    <div class="controls-voyager">
+                        <div class="engine-panel" style="width: 100%; max-width: 400px; display:flex; flex-direction:column; gap:15px;">
+                            <h3 class="engine-title" id="loops-engine-title" style="margin-bottom:0;">LOOPER_01 (1BAR)</h3>
+                            
+                            <div class="control-group" style="flex-direction:row; justify-content:space-between; align-items:center;">
+                                <label>BPM [<span id="loops-bpm-display">120</span>]</label>
+                                <input type="range" id="loops-bpm-slider" min="60" max="240" value="120" style="width: 150px;">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>SYNTH_VOICE</label>
+                                <select id="loops-synth-select" class="synth-select">
+                                </select>
+                            </div>
+                            
+                            <div class="control-group" style="align-items: flex-start; gap: 4px;">
+                                <label style="margin-bottom: 5px; color: var(--gold-dim);">TRANSPORT INSTRUCTIONS</label>
+                                <div style="display:flex; flex-direction:column; gap: 8px; width:100%; font-size: 0.75rem; color:var(--text-main);">
+                                    <div style="display:flex; justify-content:space-between;"><span>[SPACE]</span> <span style="color:var(--v-red);">REC</span><span style="color:var(--text-dim);"> / </span><span style="color:var(--v-yellow);">DUB</span><span style="color:var(--text-dim);"> / </span><span style="color:var(--v-green);">PLAY</span></div>
+                                    <div style="display:flex; justify-content:space-between;"><span>[DOUBLE_SPACE]</span> <span style="color:var(--text-main);">STOP</span></div>
+                                    <div style="display:flex; justify-content:space-between;"><span>[HOLD_SPACE]</span> <span style="color:var(--text-dim);">CLEAR TRK</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -279,5 +332,6 @@
     </div>
     
     <script src="app.js"></script>
+    <script src="loops.js"></script>
 </body>
 </html>

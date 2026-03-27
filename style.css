@@ -466,3 +466,52 @@ input[type=range]::-moz-range-track {
         text-align: center !important;
     }
 }
+
+/* LOOP STATION UI */
+.loops-layout {
+    display:flex; width: 100%; gap: 60px; justify-content: center; align-items: center;
+}
+.loop-orbit-bg {
+    stroke: rgba(212, 175, 55, 0.05); /* very dim gold */
+    stroke-width: 4;
+}
+.loop-orbit-progress {
+    stroke: transparent;
+    stroke-width: 4;
+    stroke-dasharray: 1225; /* 2 * PI * 195 = 1225.22 */
+    stroke-dashoffset: 1225;
+    transition: stroke 0.3s ease;
+}
+.loop-orbit-progress.state-rec {
+    stroke: var(--v-red);
+    filter: drop-shadow(0 0 5px var(--v-red));
+}
+.loop-orbit-progress.state-dub {
+    stroke: var(--v-yellow);
+    filter: drop-shadow(0 0 5px var(--v-yellow));
+}
+.loop-orbit-progress.state-play {
+    stroke: var(--v-green);
+    filter: drop-shadow(0 0 5px var(--v-green));
+}
+.loop-orbit-dot {
+    fill: var(--text-main);
+    filter: drop-shadow(0 0 3px var(--text-main));
+    transition: opacity 0.2s;
+}
+
+@media (max-width: 800px) {
+    .loops-layout {
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 50px;
+    }
+    #loop-orbit-svg {
+        transform: translate(-50%, -50%) scale(0.85);
+    }
+}
+@media (max-width: 400px) {
+    #loop-orbit-svg {
+        transform: translate(-50%, -64%) scale(0.70);
+    }
+}

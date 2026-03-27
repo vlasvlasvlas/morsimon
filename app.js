@@ -87,7 +87,7 @@ document.addEventListener('keyup', (e) => {
 // 1. ROUTING LÓGICO Y CONTROLES
 // ========================
 const app = {
-    views: ['home', 'classic', 'experimental'],
+    views: ['home', 'classic', 'experimental', 'loops'],
     currentView: 'home',
     navigate: function(target) {
         if (APP_STATE.isPlayingFILE) return; 
@@ -123,6 +123,12 @@ const app = {
         } else if (target === 'experimental') {
             const expHolder = document.getElementById('experimental-simon-placeholder');
             expHolder.insertBefore(simonElement, expHolder.firstChild);
+        } else if (target === 'loops') {
+            document.getElementById('homeBtn-header').style.display = 'block';
+            stopClassicGame();
+            if (typeof stopGenerativeGame === 'function') stopGenerativeGame();
+            
+            // Note: El contenedor del simulador de loops ya tiene su propio simon en el HTML
         }
     }
 };
