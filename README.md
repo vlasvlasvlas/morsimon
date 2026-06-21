@@ -47,3 +47,6 @@ MORSIMON toma la estructura secuencial del juego Simón y la cruza con la traduc
 ## Repositorio
 
 [GitHub: vlasvlasvlas/morsimon](https://github.com/vlasvlasvlas/morsimon)
+## License
+
+MIT License — © 2026 [Vladimiro Bellini](https://github.com/vlasvlasvlas). Free to use and modify, attribution required.
