@@ -1,5 +1,7 @@
 # MORSIMON
 
+<img width="1828" height="904" alt="image" src="https://github.com/user-attachments/assets/d2bc0878-062e-445d-bfcd-ab2f250f02dc" />
+
 **MORSIMON** es un proyecto interactivo que cruza el lenguaje del código Morse con la lógica del clásico juego **Simón**.
 
 ## Qué propone
